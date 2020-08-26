@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--    shiro 的 web 过滤器-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login"/>
+        <property name="successUrl" value="/index"/>
+        <property name="unauthorizedUrl" value="/refuse.html"/>
+
+<!--        添加自定义的过滤器-->
+        <property name="filters">
+            <map>
+                <entry key="authc" value-ref="myFormAuthenticationFilter"/>
+            </map>
+        </property>
+
+        <property name="filterChainDefinitions">
+            <value>
+<!--                所有的静态资源都要匿名访问-->
+                /bootstrap/**=anon
+                /css/**=anon
+                /js/**=anon
+                /static/**=anon
+
+<!--                设置访问权限-->
+                /apply_baoxiao.jsp=perms[baoxiao:apply]
+                /myBaoxiaoBill=perms[baoxiao:billquery]
+                /myTaskList=perms[baoxiao:tasklist]
+                /add_process.jsp=perms[baoxiao:publish]
+                /processDefinitionList=perms[baoxiao:processlist]
+                /findUserList=perms[user:query]
+                /toAddRole=perms[user:create]
+
+<!--                退出系统-->
+                /logout=logout
+
+<!--                其他请求都必须先通过认证才能访问-->
+                /**=authc
+            </value>
+        </property>
+    </bean>
+
+<!--    配置 SecurityManager 安全管理器-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="customRealm"/>
+    </bean>
+
+<!--    配置凭证器-->
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+<!--        加密方式-->
+        <property name="hashAlgorithmName" value="md5"/>
+<!--        加密次数-->
+        <property name="hashIterations" value="2"/>
+    </bean>
+
+<!--    配置自定义 realm-->
+    <bean id="customRealm" class="com.web.oa.shiro.CustomRealm">
+<!--        注入凭证器，realm 按照凭证器要求进行散列-->
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+
+<!--    配置自定义的 shiro filter-->
+    <bean id="myFormAuthenticationFilter" class="com.web.oa.shiro.MyFormAuthenticationFilter"/>
+</beans>
