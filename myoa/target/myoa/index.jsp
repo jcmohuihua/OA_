@@ -48,7 +48,7 @@
                 <div class="collapse navbar-collapse" id="hard-navbar">
 
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="aa.html" class="atip" target="appiframe" data-toggle="tooltip" data-placement="bottom" data-title="首页"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+                        <li><a href="welcome.html" class="atip" target="appiframe" data-toggle="tooltip" data-placement="bottom" data-title="首页"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span> ${activeUser.username}

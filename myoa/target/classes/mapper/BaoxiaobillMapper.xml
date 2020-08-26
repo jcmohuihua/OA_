@@ -108,6 +108,10 @@
     values (#{id,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, #{title,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{creatdate,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, 
       #{userId,jdbcType=INTEGER})
+
+      <selectKey keyProperty="id" resultType="int" order="AFTER">
+        select LAST_INSERT_ID()
+      </selectKey>
   </insert>
   <insert id="insertSelective" parameterType="com.web.oa.pojo.Baoxiaobill" >
     insert into baoxiaobill

@@ -51,16 +51,16 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="col_name">金额</label>
+                                <label>金额</label>
                                 <input type="text" class="form-control" id="money" name="money" readonly="readonly" value="${baoxiaoBill.money}">
                             </div>
                             
                             <div class="form-group">
-                                <label for="seo_title">申请事由</label>
+                                <label>申请事由</label>
                                 <textarea class="form-control" rows="10" cols="10" id="remark" readonly="readonly" name="remark">${baoxiaoBill.remark}</textarea>
                             </div>
                             <div class="form-group">
-                                <label for="seo_title">批注</label>
+                                <label>批注</label>
                                 <textarea class="form-control" rows="8" cols="10" id="comment" name="comment"></textarea>
                             </div>
                             <div class="form-group">

@@ -27,13 +27,13 @@
                 /static/**=anon
 
 <!--                设置访问权限-->
-                /apply_baoxiao.jsp=perms[baoxiao:apply]
+                <!--/apply_baoxiao.jsp=perms[baoxiao:apply]
                 /myBaoxiaoBill=perms[baoxiao:billquery]
                 /myTaskList=perms[baoxiao:tasklist]
                 /add_process.jsp=perms[baoxiao:publish]
                 /processDefinitionList=perms[baoxiao:processlist]
                 /findUserList=perms[user:query]
-                /toAddRole=perms[user:create]
+                /toAddRole=perms[user:create]-->
 
 <!--                退出系统-->
                 /logout=logout

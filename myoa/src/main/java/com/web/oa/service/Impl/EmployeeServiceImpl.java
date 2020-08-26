@@ -13,7 +13,7 @@ import java.util.List;
  * @author mhh
  * 2020/8/25 0025 - 下午 7:22
  */
-@Service
+@Service("employeeService")
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
@@ -30,5 +30,10 @@ public class EmployeeServiceImpl implements EmployeeService {
             return employees.get(0);
         }
         return null;
+    }
+
+    @Override
+    public Employee findManagerByManagerId(long managerId) {
+        return em.selectByPrimaryKey(managerId);
     }
 }

@@ -46,12 +46,12 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="col_name">金额</label>
+                                <label>金额</label>
                                 <input type="text" class="form-control" id="money" name="money" placeholder="">
                             </div>
                             
                             <div class="form-group">
-                                <label for="seo_title">申请事由</label>    
+                                <label>申请事由</label>
                                 <textarea class="form-control" rows="15" cols="10" id="remark" name="remark"></textarea>
                             </div>
                             
@@ -61,6 +61,7 @@
                             </div>
 
                         </div>
+                    </div>
                 </div>
             </form>
         </div>

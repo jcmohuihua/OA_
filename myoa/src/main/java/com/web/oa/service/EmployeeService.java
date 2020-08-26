@@ -9,4 +9,6 @@ import com.web.oa.pojo.Employee;
 public interface EmployeeService {
     //根据用户名查询
     Employee findEmployeeByName(String name);
+
+    Employee findManagerByManagerId(long managerId);
 }
