@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="myoa" target="1.7" />
+      <module name="myoa" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

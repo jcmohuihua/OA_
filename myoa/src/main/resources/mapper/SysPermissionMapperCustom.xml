@@ -18,6 +18,20 @@
             <result property="available" column="available"/>
         </collection>
     </resultMap>
+    
+    <resultMap id="RoleAndPermissionsMap" type="com.web.oa.pojo.SysRole">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="available" column="available"/>
+
+        <collection property="permissionList" ofType="com.web.oa.pojo.SysPermission">
+            <id property="id" column="permission_id"/>
+            <result property="name" column="permission_name"/>
+            <result property="type" column="type"/>
+            <result property="url" column="url"/>
+            <result property="percode" column="percode"/>
+        </collection>
+    </resultMap>
 
     <select id="getMenuTree" resultMap="menuTreeResultMap">
         select id, name
@@ -29,5 +43,76 @@
         select *
         from sys_permission
         where parentid = #{id} and type like '%menu%'
+    </select>
+
+    <select id="findUserAndRoleList" resultType="com.web.oa.pojo.EmployeeCustom">
+        select
+            e.*,
+            s1.sys_role_id roleId,
+            s2.name rolename,
+            e2.name manager
+        from employee e
+            inner join employee e2 on e.manager_id = e2.id
+            inner join sys_user_role s1 on e.name = s1.sys_user_id
+            inner join sys_role s2 on s1.sys_role_id = s2.id
+        order by e.id
+    </select>
+
+    <select id="findRoleAndPermissionsByUserId" parameterType="string" resultMap="RoleAndPermissionsMap">
+        select
+            s1.*,
+            s3.id permission_id,
+            s3.name permission_name,
+            s3.type,
+            s3.url,
+            s3.percode
+        from sys_role s1
+            inner join sys_role_permission s2 on s1.id = s2.sys_role_id
+            inner join sys_permission s3 on s2.sys_permission_id = s3.id
+            inner join sys_user_role s4 on s1.id = s4.sys_role_id
+            inner join employee e on s4.sys_user_id = e.name
+        where e.name = #{userId}
+    </select>
+
+    <select id="findRoleAndPermissionsByRoleId" parameterType="string" resultType="com.web.oa.pojo.SysPermission">
+        select
+            s3.id,
+            s3.name
+        from sys_role s1
+            inner join sys_role_permission s2 on s1.id = s2.sys_role_id
+            inner join sys_permission s3 on s2.sys_permission_id = s3.id
+        where s1.id = #{roleId}
+    </select>
+
+    <select id="findRoleByUserId" parameterType="string" resultType="string">
+        select
+            s1.name
+        from sys_role s1
+        where s1.id in
+            (
+                select
+                    s2.sys_role_id
+                from sys_user_role s2
+                where s2.sys_user_id = #{userId}
+            )
+    </select>
+
+    <select id="findPermissionByUserId" parameterType="string" resultType="string">
+        select
+            s1.percode
+        from sys_permission s1
+        where s1.id in
+            (
+                select
+                    s2.sys_permission_id
+                from sys_role_permission s2
+                where s2.sys_role_id in
+                    (
+                        select
+                            s3.sys_role_id
+                        from sys_user_role	s3
+                        where s3.sys_user_id = #{userId}
+                    )
+            )
     </select>
 </mapper>

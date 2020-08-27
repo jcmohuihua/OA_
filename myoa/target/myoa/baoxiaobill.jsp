@@ -78,7 +78,7 @@
 				 					 		class="btn btn-success btn-xs"><span class="glyphicon glyphicon-eye-open"></span> 查看当前流程图</a>
 				 				</c:if>
 				 				<c:if test="${bill.state==2}">
-				 					<a href="leaveBillAction_delete?id=${bill.id}" 
+				 					<a href="deleteBaoxiaoBill?id=${bill.id}"
 				 							class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> 删除</a>
 				 					<a href="${pageContext.request.contextPath }/viewHisComment?id=${bill.id}" 
 				 							class="btn btn-success btn-xs"><span class="glyphicon glyphicon-eye-open"></span> 查看审核记录</a>			 				

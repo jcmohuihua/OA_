@@ -10,12 +10,14 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author mhh
@@ -31,7 +33,17 @@ public class CustomRealm extends AuthorizingRealm {
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
-        return null;
+        //1. 获取用户身份信息
+        ActiveUser activeUser = (ActiveUser) principal.getPrimaryPrincipal();
+        //2. 查询数据库，获取用户的 角色信息 和 权限信息
+        Set<String> roles = sysService.findRoleByUsername(activeUser.getUsername());
+        Set<String> permissions = sysService.findPermissionByUsername(activeUser.getUsername());
+
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        info.addRoles(roles);
+        info.addStringPermissions(permissions);
+
+        return info;
     }
 
     //认证

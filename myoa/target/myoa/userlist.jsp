@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
+         pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -38,8 +38,11 @@
     <form class="form-inline">
         <div class="panel panel-default">
             <div class="panel-heading">用户列表&nbsp;&nbsp;&nbsp;
-               <button type="button" class="btn btn-primary" title="新建" data-toggle="modal" data-target="#createUserModal">新建用户</button></div>
-            
+                <button type="button" class="btn btn-primary" title="新建" data-toggle="modal"
+                        data-target="#createUserModal">新建用户
+                </button>
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead>
@@ -53,27 +56,29 @@
                     </tr>
                     </thead>
                     <tbody>
-					<c:forEach var="user" items="${userList}">
-	                    <tr>
-	                        <td>${user.id}</td>
-	                        <td>${user.name}</td>
-	                        <td>${user.email}</td>
-	                        <td>
-		                        <select class="form-control" onchange="assignRole(this.value,'${user.name}')">
-		                        	<c:forEach var="role" items="${allRoles}">
-		                        		<option value="${role.id}" <c:if test="${role.name==user.rolename}">selected</c:if>>${role.name}</option>
-		                        	</c:forEach>
-		                        </select>
-	                        </td>
-	                        <td>
-	                        	${user.manager}
-	                        </td>
-	                        <td>
-				 				<a href="#" onclick="viewPermission('${user.name}')" class="btn btn-success btn-xs" data-toggle="modal" data-target="#editModal">
-				 					<span class="glyphicon glyphicon-eye-open"></span> 查看权限</a>
-	                        </td>
-	                    </tr>
-					</c:forEach>
+                    <c:forEach var="user" items="${userList}">
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                            <td>
+                                <select class="form-control" onchange="assignRole(this.value,'${user.name}')">
+                                    <c:forEach var="role" items="${allRoles}">
+                                        <option value="${role.id}"
+                                                <c:if test="${role.name==user.rolename}">selected</c:if>>${role.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                            <td>
+                                    ${user.manager}
+                            </td>
+                            <td>
+                                <a href="#" onclick="viewPermission('${user.name}')" class="btn btn-success btn-xs"
+                                   data-toggle="modal" data-target="#editModal">
+                                    <span class="glyphicon glyphicon-eye-open"></span> 查看权限</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
             </div>
@@ -81,146 +86,165 @@
     </form>
 </div>
 
-	<!--添加用户 编辑窗口 -->
-	<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
-	  <form id="permissionForm" action="saveUser" method="post">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">×</button>
-					<h3 id="myModalLabel">编辑用户</h3>
-				</div>
-				<div class="modal-body">
-					<table class="table table-bordered table-striped" width="800px">
-						<tr>
-							<td>帐号</td>
-							<td><input class="form-control" name="name" placeholder="名称"></td>
-						</tr>					
-						<tr>
-							<td>初始密码</td>
-							<td><input class="form-control" type="password" name="password" placeholder="名称"></td>
-						</tr>
-						<tr>
-						    <td>电子邮箱</td>
-						    <td><input class="form-control" name="email" placeholder="链接">
-						    </td>
-						</tr>
-						<tr>
-						    <td>级别</td>
-						    <td>
-						    	<select class="form-control" name="role" onchange="getNextManager(this.value)">
-						    		<option value="1">普通员工</option>
-						    		<option value="2">一级主管</option>
-						    		<option value="3">二级主管</option>
-						    		<option value="4">总经理</option>
-						    	</select>
-						    </td>
-						</tr>					
-						<tr>
-						    <td>上级主管</td>
-						    <td>
-						    	<select  id="selManager" class="form-control" name="managerId"></select>
-						    </td>
-						</tr>
-						
-					</table>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-success" data-dismiss="modal"
-						aria-hidden="true" onclick="javascript:document.getElementById('permissionForm').submit()">保存</button>
-					<button class="btn btn-default" data-dismiss="modal"
-						aria-hidden="true">关闭</button>
-				</div>
-			</div>
-		</div>
-	  </form>
-	</div>
-<!-- 查看用户角色权限窗口 -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" >
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3 id="myModalLabel">权限列表</h3>
-		</div>
-		<div class="modal-body" id="roleList">
-			 <table class="table table-bordered"  width="800px">	
-			    <thead>	
-			      	<tr>         
-						<th>角色</td>
-						<th>权限</th>
-	                </tr>
-                </thead>
-                <tbody id="roleListBody">
-                </tbody>
-			 </table>				
-		</div>
-		<div class="modal-footer">
-			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
-		</div>
-	  </div>
-	</div>
-	<script type="text/javascript">
-		//查看当前员工的角色和权限列表
-		function viewPermission(user_name) {
-			$.ajax({
-				url:'viewPermissionByUser',
-				type:'post',
-				data:{
-					userName:user_name
-				},
-				dataType:'json',
-				success:function(sysRole) {
-					//先清空原来的内容
-					$("#roleListBody").empty();
-					
-					var role_td = "<td>" + sysRole.name+"</td>";
-					var permission_td = "<td>";
-					var permission_list = sysRole.permissionList;
-					$.each(permission_list,function(i,perm){
-						permission_td += perm.name + "【" + perm.type + "】 <br/>"
-					});
-					permission_td += "</td>";
-					
-					var roleRow = $("<tr>"+role_td+permission_td+"</tr>");
-					$("#roleListBody").append($(roleRow));
-				},
-				error:function(req,error) {
-					alert(req.status+':'+error);
-				}
-			});
-		}
-		
-		//重新分配待办人
-		function assignRole(rid,uname) {
-			var url = "assignRole";
-			var params = {
-				roleId:rid,
-				userId:uname
-			};
-			$.getJSON(url,params,function(result){
-				alert(result.msg);
-				role = rid;
-			});
-		}
-		
-		//根据员工级别查找下一级别主管
-		function getNextManager(levelNo) {
-			var url = "findNextManager";
-			var params = {
-				level:levelNo
-			};
-			$.getJSON(url,params,function(managerList){
-				$("#selManager").empty();
-				$.each(managerList,function(i,manager){
-					var opt = $("<option value='"+manager.id+"'>"+manager.name+"</option>");
-					$("#selManager").append($(opt));
-				});
-			});
-		}
-	</script>
+<!--添加用户 编辑窗口 -->
+<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <form id="permissionForm" action="saveUser" method="post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                    <h3 id="myModalLabel">编辑用户</h3>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped" width="800px">
+                        <tr>
+                            <td>帐号</td>
+                            <td><input class="form-control" name="name" placeholder="名称"></td>
+                        </tr>
+                        <tr>
+                            <td>初始密码</td>
+                            <td><input class="form-control" type="password" name="password" placeholder="初始密码"></td>
+                        </tr>
+                        <tr>
+                            <td>电子邮箱</td>
+                            <td><input class="form-control" name="email" placeholder="电子邮箱">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>级别</td>
+                            <td>
+                                <select class="form-control" name="role" onchange="getNextManager(this.value)">
+                                    <option value="1" selected>普通员工</option>
+                                    <option value="2">一级主管</option>
+                                    <option value="3">二级主管</option>
+                                    <option value="4">总经理</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>角色分配</td>
+                            <td>
+                                <select class="form-control" id="roleId" name="roleId">
+                                    <c:forEach var="role" items="${allRoles}">
+                                        <option value="${role.id}"
+                                                <c:if test="${role.name=='普通用户'}">selected</c:if>>${role.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>上级主管</td>
+                            <td>
+                                <select id="selManager" class="form-control" name="managerId"></select>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal"
+                            aria-hidden="true" onclick="javascript:document.getElementById('permissionForm').submit()">
+                        保存
+                    </button>
+                    <button class="btn btn-default" data-dismiss="modal"
+                            aria-hidden="true">关闭
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
+<!-- 查看用户角色权限窗口 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel2">权限列表</h3>
+            </div>
+            <div class="modal-body" id="roleList">
+                <table class="table table-bordered" width="800px">
+                    <thead>
+                    <tr>
+                        <th>角色</th>
+                        <th>权限</th>
+                    </tr>
+                    </thead>
+                    <tbody id="roleListBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var checkRole = $("[name='role']");
+    getNextManager(checkRole.val())
+
+    //查看当前员工的角色和权限列表
+    function viewPermission(user_name) {
+        $.ajax({
+            url: 'viewPermissionByUser',
+            type: 'post',
+            data: {
+                userName: user_name
+            },
+            dataType: 'json',
+            success: function (sysRole) {
+                //先清空原来的内容
+                $("#roleListBody").empty();
+
+                var role_td = "<td>" + sysRole.name + "</td>";
+                var permission_td = "<td>";
+                var permission_list = sysRole.permissionList;
+                $.each(permission_list, function (i, perm) {
+                    permission_td += perm.name + "【" + perm.type + "】 <br/>"
+                });
+                permission_td += "</td>";
+
+                var roleRow = $("<tr>" + role_td + permission_td + "</tr>");
+                $("#roleListBody").append($(roleRow));
+            },
+            error: function (req, error) {
+                alert(req.status + ':' + error);
+            }
+        });
+    }
+
+    //重新分配待办人
+    function assignRole(rid, uname) {
+        var url = "assignRole";
+        var params = {
+            roleId: rid,
+            userId: uname
+        };
+        $.getJSON(url, params, function (result) {
+            alert(result.msg);
+            role = rid;
+        });
+    }
+
+    //根据员工级别查找下一级别主管
+    function getNextManager(levelNo) {
+        var url = "findNextManager";
+        var params = {
+            level: levelNo
+        };
+        $.getJSON(url, params, function (managerList) {
+            $("#selManager").empty();
+            $.each(managerList, function (i, manager) {
+                var opt = $("<option value='" + manager.id + "'>" + manager.name + "</option>");
+                $("#selManager").append($(opt));
+            });
+        });
+    }
+</script>
+
 </body>
 </html>

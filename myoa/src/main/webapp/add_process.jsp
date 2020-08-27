@@ -41,15 +41,16 @@
                         <div class="col-md-5">
 
                             <div class="form-group">
-                                <label for="name">流程名称 </label>
+                                <label>流程名称 </label>
                                 <input type="text" class="form-control" id="processName" name="processName" placeholder="">
                             </div>
                             <div class="form-group">
-                                <label for="email">选择流程文件</label>
+                                <label>选择流程文件</label>
                                 <input type="file" class="form-control" id="fileName" name="fileName" placeholder="">
                             </div>
                             <button type="submit" class="btn btn-primary">部署流程</button>
                         </div>
+                    </div>
                 </div>
             </form>
         </div>

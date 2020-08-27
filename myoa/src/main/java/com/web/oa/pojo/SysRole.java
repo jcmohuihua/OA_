@@ -1,11 +1,23 @@
 package com.web.oa.pojo;
 
+import java.util.List;
+
 public class SysRole {
     private String id;
 
     private String name;
 
     private String available;
+
+    private List<SysPermission> permissionList;
+
+    public List<SysPermission> getPermissionList() {
+        return permissionList;
+    }
+
+    public void setPermissionList(List<SysPermission> permissionList) {
+        this.permissionList = permissionList;
+    }
 
     public String getId() {
         return id;
