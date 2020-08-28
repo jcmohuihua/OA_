@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -50,10 +51,15 @@
                     <tr id="${role.id}">
                         <td>${role.name}</td>
                         <td>
-                            <a href="#" onclick="viewPermissions('${role.id}')" class="btn btn-info btn-xs"><span
-                                    class="glyphicon glyphicon-edit"></span> 编辑</a>
-                            <a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span>
-                                删除</a>
+                            <shiro:hasPermission name="user:roleEdit">
+                                <a href="#" onclick="viewPermissions('${role.id}')" class="btn btn-info btn-xs"><span
+                                        class="glyphicon glyphicon-edit"></span> 编辑</a>
+                            </shiro:hasPermission>
+                            <shiro:hasPermission name="user:roleDelete">
+                                <a href="#" onclick="deleteRemind('${role.id}')" class="btn btn-danger btn-xs"><span
+                                        class="glyphicon glyphicon-remove"></span>
+                                    删除</a>
+                            </shiro:hasPermission>
                         </td>
                     </tr>
                 </c:forEach>
@@ -113,35 +119,42 @@
         </div>
     </div>
 </div>
-    <script type="text/javascript">
-        var role_id;
+<script type="text/javascript">
+    var role_id;
 
-        function viewPermissions(role_id) {
-            $('#roleId').val(role_id);
-            $.ajax({
-                url: 'loadMyPermissions',
-                type: 'post',
-                data: {
-                    roleId: role_id
-                },
-                dataType: 'json',
-                success: function (permissionList) {
-                    //$("input[type=checkbox]").attr('checked',false);
-                    $.each(permissionList, function (i, perm) {
-                        $('#chk' + perm.id).attr('checked', true);
-                    });
-                    $("#editModal").modal("show");
-                },
-                error: function (req, error) {
-                    alert(req.status + ':' + error);
-                }
-            });
-        }
+    function viewPermissions(role_id) {
+        $('#roleId').val(role_id);
+        $.ajax({
+            url: 'loadMyPermissions',
+            type: 'post',
+            data: {
+                roleId: role_id
+            },
+            dataType: 'json',
+            success: function (permissionList) {
+                //$("input[type=checkbox]").attr('checked',false);
+                $.each(permissionList, function (i, perm) {
+                    $('#chk' + perm.id).attr('checked', true);
+                });
+                $("#editModal").modal("show");
+            },
+            error: function (req, error) {
+                alert(req.status + ':' + error);
+            }
+        });
+    }
 
-        function closePanel() {
-            location = "findRoles";
+    function deleteRemind(role_id) {
+        var b = confirm("是否确认删除？");
+        if(b){
+            location = "deleteRoleAndPermission?roleId=" + role_id;
         }
-    </script>
+    }
+
+    function closePanel() {
+        location = "findRoles";
+    }
+</script>
 
 
 </body>

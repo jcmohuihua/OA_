@@ -29,7 +29,7 @@ public class SysServiceImpl implements SysService {
     @Autowired
     private EmployeeMapper employeeMapper;
     @Autowired
-    private SysUserRoleMapper userRoleMapper;
+    private SysUserRoleMapper sysUserRoleMapper;
 
     @Override
     public List<MenuTree> loadMenuTree() {
@@ -44,7 +44,20 @@ public class SysServiceImpl implements SysService {
 
     @Override
     public SysRole findRoleAndPermissionsByUserId(String userId) {
-        return permissionMapperCustom.findRoleAndPermissionsByUserId(userId);
+        // 若用户没有角色信息，意味着也不存在权限信息
+        //1. 先查询用户是否拥有角色信息
+        SysUserRoleExample example = new SysUserRoleExample();
+        SysUserRoleExample.Criteria criteria = example.createCriteria();
+        criteria.andSysUserIdEqualTo(userId);
+
+        List<SysUserRole> sysUserRoles = sysUserRoleMapper.selectByExample(example);
+        if(sysUserRoles.size() > 0){
+            //2. 用户存在角色信息，查询角色的权限信息
+            return permissionMapperCustom.findRoleAndPermissionsByUserId(userId);
+        }else{
+            //3. 用户不存在角色信息，则返回一个空内容的对象
+            return new SysRole();
+        }
     }
 
     @Override
@@ -110,7 +123,7 @@ public class SysServiceImpl implements SysService {
     }
 
     @Override
-    public void saveEmployeeAndRole(Employee employee, String roleId) {
+    public void saveEmployeeAndRole(Employee employee) {
         //1. 保存新用户信息
         //加密
         Md5Hash hash = new Md5Hash(employee.getPassword(), "eteokues", 2);
@@ -118,12 +131,15 @@ public class SysServiceImpl implements SysService {
         employee.setSalt("eteokues");
 
         employeeMapper.insert(employee);
-        //2. 保存新用户的角色信息
-        SysUserRole userRole = new SysUserRole();
-        userRole.setId(String.valueOf(employee.getId()));
-        userRole.setSysUserId(employee.getName());
-        userRole.setSysRoleId(roleId);
+    }
 
-        userRoleMapper.insert(userRole);
+    @Override
+    public void deleteRoleAndPermissionByRoleId(String roleId) {
+        sysRoleMapper.deleteByPrimaryKey(roleId);
+    }
+
+    @Override
+    public List<MenuTree> findAllMenuAndPermission() {
+        return permissionMapperCustom.getAllMenuAndPermission();
     }
 }

@@ -32,5 +32,9 @@ public interface SysService {
 
     void updatePermissionByRoleId(String roleId, String[] permissionIds);
 
-    void saveEmployeeAndRole(Employee employee, String roleId);
+    void saveEmployeeAndRole(Employee employee);
+
+    void deleteRoleAndPermissionByRoleId(String roleId);
+
+    List<MenuTree> findAllMenuAndPermission();
 }

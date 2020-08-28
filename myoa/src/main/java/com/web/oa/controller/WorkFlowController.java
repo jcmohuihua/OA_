@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -80,10 +81,24 @@ public class WorkFlowController {
      * @return
      */
     @RequestMapping("/delDeployment")
-    public String delDeployment(String deploymentId){
-        workFlowService.deleteDeploymentById(deploymentId);
+    @ResponseBody
+    public int delDeployment(String deploymentId){
+        int msg = workFlowService.deleteDeploymentById(deploymentId);
 
-        return "redirect:/processDefinitionList";
+//        return "redirect:/processDefinitionList";
+        return msg;
+    }
+
+    /**
+     * 级连删除流程
+     * @param deploymentId
+     * @return
+     */
+    @RequestMapping("/delDeploymentAgain")
+    @ResponseBody
+    public int delDeploymentAgain(String deploymentId){
+
+        return workFlowService.deleteDeploymentAgainById(deploymentId);
     }
 
     /**

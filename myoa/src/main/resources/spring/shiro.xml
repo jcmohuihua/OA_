@@ -9,7 +9,7 @@
         <property name="securityManager" ref="securityManager"/>
         <property name="loginUrl" value="/login"/>
         <property name="successUrl" value="/index"/>
-        <property name="unauthorizedUrl" value="/refuse.html"/>
+        <property name="unauthorizedUrl" value="refuse.html"/>
 
 <!--        添加自定义的过滤器-->
         <property name="filters">
@@ -21,23 +21,25 @@
         <property name="filterChainDefinitions">
             <value>
 <!--                所有的静态资源都要匿名访问-->
-                /bootstrap/**=anon
-                /css/**=anon
-                /js/**=anon
-                /static/**=anon
+                bootstrap/**=anon
+                css/**=anon
+                js/**=anon
+                static/**=anon
+
 
 <!--                设置访问权限-->
-                <!--/apply_baoxiao.jsp=perms[baoxiao:apply]
+                /apply_baoxiao.jsp=perms[baoxiao:apply]
                 /myBaoxiaoBill=perms[baoxiao:billquery]
                 /myTaskList=perms[baoxiao:tasklist]
-                /add_process.jsp=perms[baoxiao:publish]
-                /processDefinitionList=perms[baoxiao:processlist]
-                /findUserList=perms[user:query]
-                /toAddRole=perms[user:create]-->
 
+                /add_process.jsp=perms[process:publish]
+                /processDefinitionList=perms[process:processlist]
+
+                /findUserList=perms[user:query]
+                /toAddRole=perms[user:create]
+                /findRoles=perms[user:rolelist]
 <!--                退出系统-->
                 /logout=logout
-
 <!--                其他请求都必须先通过认证才能访问-->
                 /**=authc
             </value>

@@ -77,9 +77,35 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     }
 
     @Override
-    public void deleteDeploymentById(String deploymentId) {
-        repositoryService.deleteDeployment(deploymentId);
-        System.out.println("流程删除成功......");
+    public int deleteDeploymentById(String deploymentId) {
+        //1. 先判断流程是否正在执行
+        int msg;
+        ProcessDefinition processDefinition = repositoryService
+                .createProcessDefinitionQuery()
+                .deploymentId(deploymentId)
+                .singleResult();
+        String processDefinitionId = processDefinition.getId();
+        ProcessInstance pi = runtimeService
+                .createProcessInstanceQuery()
+                .processDefinitionId(processDefinitionId)
+                .singleResult();
+
+        if (pi == null) {
+            //流程执行结束
+            repositoryService.deleteDeployment(deploymentId);
+            msg = 1;
+            return msg;
+        }else{
+            msg = 0;
+            return msg;
+        }
+    }
+
+    @Override
+    public int deleteDeploymentAgainById(String deploymentId) {
+        //级连删除
+        repositoryService.deleteDeployment(deploymentId, true);
+        return 1;
     }
 
     @Override

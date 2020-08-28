@@ -24,7 +24,9 @@ public interface WorkFlowService {
     //查询流程定义信息列表
     List<ProcessDefinition> findProcessDefinitionList();
 
-    void deleteDeploymentById(String deploymentId);
+    int deleteDeploymentById(String deploymentId);
+
+    int deleteDeploymentAgainById(String deploymentId);
 
     InputStream getImageInputStream(String deploymentId, String imageName);
 

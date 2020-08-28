@@ -14,7 +14,6 @@
 <script src="static/js/bootstrapValidator.min.js"></script>
 </head>
 <body>
-
 	<div class="container">
 		<div class="row">
 			<div class="col-md-offset-3 col-md-6">

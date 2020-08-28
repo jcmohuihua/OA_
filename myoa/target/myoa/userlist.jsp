@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -38,9 +39,11 @@
     <form class="form-inline">
         <div class="panel panel-default">
             <div class="panel-heading">用户列表&nbsp;&nbsp;&nbsp;
-                <button type="button" class="btn btn-primary" title="新建" data-toggle="modal"
-                        data-target="#createUserModal">新建用户
-                </button>
+                <shiro:hasAnyRoles name="网管,部门经理,总经理,财务,会计部主管">
+                    <button type="button" class="btn btn-primary" title="新建" data-toggle="modal"
+                            data-target="#createUserModal">新建用户
+                    </button>
+                </shiro:hasAnyRoles>
             </div>
 
             <div class="table-responsive">
@@ -62,12 +65,25 @@
                             <td>${user.name}</td>
                             <td>${user.email}</td>
                             <td>
+                                <shiro:hasPermission name="user:assignRole">
                                 <select class="form-control" onchange="assignRole(this.value,'${user.name}')">
+                                    <option>请选择</option>
+                                    <c:forEach var="role" items="${allRoles}">
+                                        <option value="${role.id}"
+                                            <c:if test="${role.name==user.rolename}">selected</c:if>>${role.name}</option>
+                                    </c:forEach>
+                                </select>
+                                </shiro:hasPermission>
+
+                                <shiro:lacksPermission name="user:assignRole">
+                                <select disabled class="form-control" onchange="assignRole(this.value,'${user.name}')">
+                                    <option>请选择</option>
                                     <c:forEach var="role" items="${allRoles}">
                                         <option value="${role.id}"
                                                 <c:if test="${role.name==user.rolename}">selected</c:if>>${role.name}</option>
                                     </c:forEach>
                                 </select>
+                                </shiro:lacksPermission>
                             </td>
                             <td>
                                     ${user.manager}
@@ -121,17 +137,6 @@
                                     <option value="2">一级主管</option>
                                     <option value="3">二级主管</option>
                                     <option value="4">总经理</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>角色分配</td>
-                            <td>
-                                <select class="form-control" id="roleId" name="roleId">
-                                    <c:forEach var="role" items="${allRoles}">
-                                        <option value="${role.id}"
-                                                <c:if test="${role.name=='普通用户'}">selected</c:if>>${role.name}</option>
-                                    </c:forEach>
                                 </select>
                             </td>
                         </tr>

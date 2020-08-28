@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author mhh
@@ -54,15 +55,31 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void updateEmployeeRole(String roleId, String userId) {
-        //1. 先根据查询
         SysUserRoleExample example = new SysUserRoleExample();
         SysUserRoleExample.Criteria criteria = example.createCriteria();
-        criteria.andSysUserIdEqualTo(userId);
+        //若roleId 为“请选择”，则表示清空该用户的角色信息
+        if("请选择".equals(roleId)){
+            criteria.andSysUserIdEqualTo(userId);
 
-        SysUserRole sysUserRole = sysUserRoleMapper.selectByExample(example).get(0);
-        sysUserRole.setSysRoleId(roleId);
-        //2. 再修改
-        sysUserRoleMapper.updateByPrimaryKey(sysUserRole);
+            sysUserRoleMapper.deleteByExample(example);
+        }else{
+            //1. 先根据查询
+            criteria.andSysUserIdEqualTo(userId);
+            List<SysUserRole> sysUserRoles = sysUserRoleMapper.selectByExample(example);
+            if (sysUserRoles.size() > 0) {
+                SysUserRole sysUserRole = sysUserRoles.get(0);
+                sysUserRole.setSysRoleId(roleId);
+                //2. 再修改
+                sysUserRoleMapper.updateByPrimaryKey(sysUserRole);
+            }else{
+                SysUserRole sysUserRole = new SysUserRole();
+                sysUserRole.setId(UUID.randomUUID().toString());
+                sysUserRole.setSysUserId(userId);
+                sysUserRole.setSysRoleId(roleId);
+                //3. 添加新的用户与角色关系
+                sysUserRoleMapper.insert(sysUserRole);
+            }
+        }
     }
 
     @Override

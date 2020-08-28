@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.web.oa.mapper.SysPermissionMapperCustom">
-    
+
     <resultMap id="menuTreeResultMap" type="com.web.oa.pojo.MenuTree">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
@@ -18,7 +18,7 @@
             <result property="available" column="available"/>
         </collection>
     </resultMap>
-    
+
     <resultMap id="RoleAndPermissionsMap" type="com.web.oa.pojo.SysRole">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
@@ -30,6 +30,23 @@
             <result property="type" column="type"/>
             <result property="url" column="url"/>
             <result property="percode" column="percode"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="MenuAndPermissionMap" type="com.web.oa.pojo.MenuTree">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+
+        <collection property="children" ofType="com.web.oa.pojo.SysPermission" select="getSubMenuAndPermissions" column="id">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="type" column="type"/>
+            <result property="url" column="url"/>
+            <result property="percode" column="percode"/>
+            <result property="parentid" column="parentid"/>
+            <result property="parentids" column="parentids"/>
+            <result property="sortstring" column="sortstring"/>
+            <result property="available" column="available"/>
         </collection>
     </resultMap>
 
@@ -52,9 +69,9 @@
             s2.name rolename,
             e2.name manager
         from employee e
-            inner join employee e2 on e.manager_id = e2.id
-            inner join sys_user_role s1 on e.name = s1.sys_user_id
-            inner join sys_role s2 on s1.sys_role_id = s2.id
+            left join employee e2 on e.manager_id = e2.id
+            left join sys_user_role s1 on e.name = s1.sys_user_id
+            left join sys_role s2 on s1.sys_role_id = s2.id
         order by e.id
     </select>
 
@@ -114,5 +131,17 @@
                         where s3.sys_user_id = #{userId}
                     )
             )
+    </select>
+
+    <select id="getAllMenuAndPermission" resultMap="MenuAndPermissionMap">
+        select id, name
+        from sys_permission
+        where parentid = 1
+    </select>
+    
+    <select id="getSubMenuAndPermissions" resultType="com.web.oa.pojo.SysPermission">
+        select *
+        from sys_permission
+        where parentid = #{id}
     </select>
 </mapper>

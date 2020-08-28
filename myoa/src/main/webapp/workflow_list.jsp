@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
+         pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -38,7 +39,7 @@
     <form class="form-inline">
         <div class="panel panel-default">
             <div class="panel-heading">部署信息管理列表</div>
-            
+
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead>
@@ -50,28 +51,32 @@
                     </tr>
                     </thead>
                     <tbody>
-					<c:forEach var="dep" items="${depList}">
-	                    <tr>
-	                        <td>${dep.id}</td>
-	                        <td>${dep.name}</td>
-	                        <td>
-	                        	<fmt:formatDate value="${dep.deploymentTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
-	                        </td>
-	                        <td>
-	                            <a href="delDeployment?deploymentId=${dep.id}" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> 删除</a>
-	                        </td>
-	                    </tr>
-					</c:forEach>
+                    <c:forEach var="dep" items="${depList}">
+                        <tr>
+                            <td>${dep.id}</td>
+                            <td>${dep.name}</td>
+                            <td>
+                                <fmt:formatDate value="${dep.deploymentTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                            </td>
+                            <td>
+                                <shiro:hasPermission name="process:remove">
+                                    <a href="#" onclick="delDeploymentRemind('${dep.id}')"
+                                       class="btn btn-danger btn-xs">
+                                        <span class="glyphicon glyphicon-remove"></span> 删除</a>
+                                </shiro:hasPermission>
+                            </td>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
             </div>
         </div>
     </form>
-    
-   <form class="form-inline">
+
+    <form class="form-inline">
         <div class="panel panel-default">
             <div class="panel-heading">流程定义信息列表</div>
-            
+
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead>
@@ -87,26 +92,72 @@
                     </tr>
                     </thead>
                     <tbody>
-					<c:forEach var="pd" items="${pdList}">
-	                    <tr>
-	                        <td>${pd.id}</td>
-	                        <td>${pd.name}</td>
-	                        <td>${pd.key}</td>
-	                        <td>${pd.version}</td>
-	                        <td>${pd.resourceName}</td>
-	                        <td>${pd.diagramResourceName}</td>
-	                        <td>${pd.deploymentId}</td>
-	                        <td>
-	                          <a target="_blank" href="viewImage?deploymentId=${pd.deploymentId}&imageName=${pd.diagramResourceName}" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-eye-open"></span> 查看流程定义图</a>
-	                        </td>
-	                    </tr>
-					</c:forEach>
+                    <c:forEach var="pd" items="${pdList}">
+                        <tr>
+                            <td>${pd.id}</td>
+                            <td>${pd.name}</td>
+                            <td>${pd.key}</td>
+                            <td>${pd.version}</td>
+                            <td>${pd.resourceName}</td>
+                            <td>${pd.diagramResourceName}</td>
+                            <td>${pd.deploymentId}</td>
+                            <td>
+                                <shiro:hasPermission name="process:viewimage">
+                                    <a target="_blank"
+                                       href="viewImage?deploymentId=${pd.deploymentId}&imageName=${pd.diagramResourceName}"
+                                       class="btn btn-success btn-xs"><span class="glyphicon glyphicon-eye-open"></span>
+                                        查看流程定义图</a>
+                                </shiro:hasPermission>
+                            </td>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
             </div>
         </div>
     </form>
-    
 </div>
+
+<script type="text/javascript">
+    function delDeploymentRemind(dep_id) {
+        var deploymentId = dep_id;
+        var b = confirm("是否确认删除？");
+        if (b) {
+            var c = false;
+            $.ajax({
+                url: "delDeployment",
+                type: "get",
+                data: {
+                    "deploymentId": deploymentId
+                },
+                dateType: "json",
+                success: function (msg) {
+                    if (msg == 1) {
+                        alert("删除成功");
+                        location = "processDefinitionList";
+                    } else {
+                        alert("删除失败，该流程正在执行")
+                        c = confirm("是否强制删除？")
+                    }
+
+                    if (c) {
+                        $.ajax({
+                            url: "delDeploymentAgain",
+                            type: "get",
+                            data: {
+                                "deploymentId": deploymentId
+                            },
+                            dateType: "json",
+                            success: function (msg) {
+                                alert("删除成功");
+                                location = "processDefinitionList";
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+</script>
 </body>
 </html>

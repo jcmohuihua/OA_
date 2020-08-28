@@ -8,7 +8,6 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -110,8 +109,8 @@ public class UserController {
      * @return
      */
     @RequestMapping("/saveUser")
-    public String saveUser(Employee employee, String roleId){
-        sysService.saveEmployeeAndRole(employee, roleId);
+    public String saveUser(Employee employee){
+        sysService.saveEmployeeAndRole(employee);
 
         return "redirect:/findUserList";
     }
@@ -138,7 +137,7 @@ public class UserController {
         //1. 查询所有角色信息
         List<SysRole> allRoles = sysService.findAllRole();
         //2. 查询所有权限信息
-        List<MenuTree> allMenuAndPermissions = sysService.loadMenuTree();
+        List<MenuTree> allMenuAndPermissions = sysService.findAllMenuAndPermission();
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("allRoles", allRoles);
@@ -163,10 +162,28 @@ public class UserController {
         return permissionList;
     }
 
+    /**
+     * 更新某一角色的权限信息
+     * @param roleId
+     * @param permissionIds
+     * @return
+     */
     @RequestMapping("/updateRoleAndPermission")
     public String updateRoleAndPermission(String roleId, String[] permissionIds){
         //1. 更新某一角色的权限信息
         sysService.updatePermissionByRoleId(roleId, permissionIds);
+        return "redirect:/findRoles";
+    }
+
+    /**
+     * 删除角色
+     * @param roleId
+     * @return
+     */
+    @RequestMapping("/deleteRoleAndPermission")
+    public String deleteRoleAndPermission(String roleId){
+        //数据库中设置了外键约束，若角色被删除，角色月权限的信息也应该被删除
+        sysService.deleteRoleAndPermissionByRoleId(roleId);
         return "redirect:/findRoles";
     }
 
@@ -177,7 +194,7 @@ public class UserController {
     @RequestMapping("/toAddRole")
     public ModelAndView toAddRole(){
         //1. 获取权限分配列表
-        List<MenuTree> allPermissions = sysService.loadMenuTree();
+        List<MenuTree> allPermissions = sysService.findAllMenuAndPermission();
         //2. 获得权限的父节点
         final List<SysPermission> menuTypes = new ArrayList<>();
         allPermissions.forEach(p -> {

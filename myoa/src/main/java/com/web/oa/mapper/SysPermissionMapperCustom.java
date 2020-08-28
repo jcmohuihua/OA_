@@ -30,4 +30,8 @@ public interface SysPermissionMapperCustom {
     Set<String> findRoleByUserId(String userId);
 
     Set<String> findPermissionByUserId(String userId);
+
+    List<MenuTree> getAllMenuAndPermission();
+
+    List<SysPermission> getSubMenuAndPermissions();
 }
