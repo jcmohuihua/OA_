@@ -38,5 +38,5 @@
     </bean>
 
 <!--    配合异常处理机制-->
-    <bean class="com.web.oa.utils.MyExceptionResolve"/>
+    <bean class="com.web.oa.exception.MyExceptionResolve"/>
 </beans>

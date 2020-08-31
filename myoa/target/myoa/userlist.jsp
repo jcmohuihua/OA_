@@ -216,8 +216,8 @@
                 var roleRow = $("<tr>" + role_td + permission_td + "</tr>");
                 $("#roleListBody").append($(roleRow));
             },
-            error: function (req, error) {
-                alert(req.status + ':' + error);
+            error: function (data) {
+                alert(data.errorMsg);
             }
         });
     }

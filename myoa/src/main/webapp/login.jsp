@@ -17,7 +17,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-offset-3 col-md-6">
-				
+
 				<form class="form-horizontal" action="login" method="post" id="loginForm">
 					<span class="heading">欢迎登录办公系统</span>
 					<div class="form-group">
@@ -34,12 +34,12 @@
 						</div>
 					</div>
 					<div class="form-group">
-						 
+
 						<div class="main-checkbox">
 							<input type="checkbox" name="remember" value="true" id="checkbox1" />
 							<label for="checkbox1"></label>
 						</div>
-						
+
 						<span class="text">Remember me</span>
 						<div class="error">${errorMsg}</div>
 						<div class="col-sm-10">

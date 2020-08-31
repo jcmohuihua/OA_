@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
+         pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -42,78 +42,81 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-8">
-							<input type="hidden" name="id" value="${baoxiaoBill.id}"/>
-							<input type="hidden" name="taskId" value="${taskId}"/>
-							
+                            <input type="hidden" name="id" value="${baoxiaoBill.id}"/>
+                            <input type="hidden" name="taskId" value="${taskId}"/>
+
                             <div class="form-group">
                                 <label>标题</label>
-								<input type="text" class="form-control" id="title" readonly="readonly" name="title" value="${baoxiaoBill.title}">
+                                <input type="text" class="form-control" id="title" readonly="readonly" name="title"
+                                       value="${baoxiaoBill.title}">
                             </div>
 
                             <div class="form-group">
                                 <label>金额</label>
-                                <input type="text" class="form-control" id="money" name="money" readonly="readonly" value="${baoxiaoBill.money}">
+                                <input type="text" class="form-control" id="money" name="money" readonly="readonly"
+                                       value="${baoxiaoBill.money}">
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>申请事由</label>
-                                <textarea class="form-control" rows="10" cols="10" id="remark" readonly="readonly" name="remark">${baoxiaoBill.remark}</textarea>
+                                <textarea class="form-control" rows="10" cols="10" id="remark" readonly="readonly"
+                                          name="remark">${baoxiaoBill.remark}</textarea>
                             </div>
                             <div class="form-group">
                                 <label>批注</label>
-                                <textarea class="form-control" rows="8" cols="10" id="comment" name="comment"></textarea>
+                                <textarea class="form-control" rows="8" cols="10" id="comment"
+                                          name="comment"></textarea>
                             </div>
                             <div class="form-group">
-                               <c:forEach var="outcome" items="${outcomeList}">
-                              		<input type="submit" name="outcome" class="btn btn-primary" value="${outcome}"/>
-                               </c:forEach>
+                                <c:forEach var="outcome" items="${outcomeList}">
+                                    <input type="submit" name="outcome" class="btn btn-primary" value="${outcome}"/>
+                                </c:forEach>
                             </div>
                         </div>
+                    </div>
                 </div>
-                
             </form>
         </div>
     </div>
 
-     <div class="panel panel-default">
-            <div class="panel-heading">报销批注信息列表</div>
-            
-            <div class="table-responsive">
-               <c:if test="${fn:length(commentList)>0}">
-	                <table class="table table-striped table-hover">
-	                    <thead>
-	                    <tr>
-	                        <th width="15%">时间</th>
-	                        <th width="10%">批注人</th>
-	                        <th width="75%">批注信息</th>
-	                    </tr>
-	                    </thead>
-	                    <tbody>
-						<c:forEach var="comment" items="${commentList}">
-		                    <tr>
-		                        <td>
-		                        	<fmt:formatDate value="${comment.time}" pattern="yyyy-MM-dd HH:mm:ss"/>
-		                        </td>
-		                        <td>${comment.userId}</td>
-		                        <td>
-		                        	${comment.fullMessage}
-		                        </td>
-		                    </tr>
-						</c:forEach>
-	                    </tbody>
-	                </table>
-                </c:if>
-                <c:if test="${fn:length(commentList)==0}">
-                	<table class="table table-striped table-hover">
-                		<tr>
-                			<td>暂无批注信息</td>
-                		</tr>
-                	</table>
-                </c:if>
-            </div>
-        </div>
-</div>
+    <div class="panel panel-default">
+        <div class="panel-heading">报销批注信息列表</div>
 
+        <div class="table-responsive">
+            <c:if test="${fn:length(commentList)>0}">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th width="15%">时间</th>
+                        <th width="10%">批注人</th>
+                        <th width="75%">批注信息</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="comment" items="${commentList}">
+                        <tr>
+                            <td>
+                                <fmt:formatDate value="${comment.time}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                            </td>
+                            <td>${comment.userId}</td>
+                            <td>
+                                    ${comment.fullMessage}
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </c:if>
+            <c:if test="${fn:length(commentList)==0}">
+                <table class="table table-striped table-hover">
+                    <tr>
+                        <td>暂无批注信息</td>
+                    </tr>
+                </table>
+            </c:if>
+        </div>
+    </div>
+</div>
 
 
 </body>

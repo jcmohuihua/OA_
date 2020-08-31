@@ -139,23 +139,26 @@
                         alert("删除失败，该流程正在执行")
                         c = confirm("是否强制删除？")
                     }
-
-                    if (c) {
-                        $.ajax({
-                            url: "delDeploymentAgain",
-                            type: "get",
-                            data: {
-                                "deploymentId": deploymentId
-                            },
-                            dateType: "json",
-                            success: function (msg) {
-                                alert("删除成功");
-                                location = "processDefinitionList";
-                            }
-                        });
-                    }
+                },
+                error: function (data) {
+                    alert(data.errorMsg);
                 }
             });
+
+            if (c) {
+                $.ajax({
+                    url: "delDeploymentAgain",
+                    type: "get",
+                    data: {
+                        "deploymentId": deploymentId
+                    },
+                    dateType: "json",
+                    success: function (msg) {
+                        alert("删除成功");
+                        location = "processDefinitionList";
+                    }
+                });
+            }
         }
     }
 </script>

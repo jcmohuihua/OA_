@@ -40,7 +40,7 @@
                     </button>
                     <!--nav troggle-->
                     <!--brand-->
-                    <a class="navbar-brand" href="#">办公自动系统</a>
+                    <a class="navbar-brand" href="/index">办公自动系统</a>
                     <!--brand-->
                 </div>
 
@@ -78,8 +78,8 @@
                         <div class="panel-heading panel-heading-self" role="tab" id="heading${state.index}">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapse${state.index}" 
-                                   <c:if test="${state.index==0}">aria-expanded="true"</c:if> 
-                                   <c:if test="${state.index>0}">aria-expanded="false"</c:if> 
+                                   <c:if test="${state.index==0}">aria-expanded="true"</c:if>
+                                   <c:if test="${state.index>0}">aria-expanded="false"</c:if>
                                    aria-controls="collapse${state.index}">
                                     <span class="glyphicon glyphicon-list-alt"></span> ${menu.name}
                                 </a>

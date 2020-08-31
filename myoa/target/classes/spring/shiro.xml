@@ -21,10 +21,10 @@
         <property name="filterChainDefinitions">
             <value>
 <!--                所有的静态资源都要匿名访问-->
-                bootstrap/**=anon
-                css/**=anon
-                js/**=anon
-                static/**=anon
+                /bootstrap/**=anon
+                /css/**=anon
+                /js/**=anon
+                /static/**=anon
 
 
 <!--                设置访问权限-->
